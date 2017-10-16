@@ -11,12 +11,14 @@ import { Component } from '@angular/core';
 export class AppComponent {
 constructor(private userServic:UserService,private auth:AuthService, router:Router){
   auth.user$.subscribe(user=>{
-    if(user){
+    if(!user) return;
+  
       userServic.save(user);
       let returnUrl=localStorage.getItem('returnUrl');
-      router.navigateByUrl(returnUrl);
-    }
-  
-  })
+      if(!returnUrl) return;
+        localStorage.removeItem('returnUrl');
+        router.navigateByUrl(returnUrl);
+    
+  });
 }
 }
